@@ -112,6 +112,9 @@ class Quantity(AtomicExpr):
         if isinstance(new, Quantity) and self != old:
             return self
 
+    def _eval_simplify(self):
+        return quantsimp(self)
+
     @staticmethod
     def get_dimensional_expr(expr):
         if isinstance(expr, Mul):
