@@ -512,6 +512,7 @@ def simplify(expr, ratio=1.7, measure=count_ops, rational=False):
     to the Floats.
     """
     expr = sympify(expr)
+    from sympy.physics.units import Quantity
 
     try:
         return expr._eval_simplify(ratio=ratio, measure=measure)
@@ -872,7 +873,7 @@ def _nthroot_solve(p, n, prec):
 
 
 def quantsimp(expr):
-    from sympy.physics.units import *
+    from sympy.physics.units import Quantity, scale_factor
     a,b = symbols('a b')
     a = 1/expr.args[1]
     b = expr.args[0]
