@@ -874,10 +874,16 @@ def _nthroot_solve(p, n, prec):
 
 def quantsimp(expr):
     from sympy.physics.units import Quantity
-    a,b = symbols('a b')
-    a = 1/expr.args[0]
-    b = expr.args[1]
-    return b.scale_factor/a.scale_factor
+    l = []
+    n = len(expr.args)
+    for i in range (n-1):
+        l.append((1/expr.args[i]).scale_factor)
+    l.append(expr.args[n-1].scale_factor)
+    a = list(reversed(l))
+    b = a[0]
+    for i in range (1, n):
+        b *= 1/a[i]
+    return b
 
 def logcombine(expr, force=False):
     """
