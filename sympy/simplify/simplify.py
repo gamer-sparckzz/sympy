@@ -888,7 +888,7 @@ def quantsimp(expr):
         elif (expr.args[i].is_symbol):
             l.append(expr.args[i])
         elif ((expr.args[i]).has(Quantity)):
-            if (expr.args[i].dimension == length):
+            if ((expr.args[i]).dimension == length):
                 l.append(expr.args[i].scale_factor)
             else:
                 l.append(expr.args[i])
