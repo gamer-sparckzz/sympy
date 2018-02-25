@@ -873,7 +873,7 @@ def _nthroot_solve(p, n, prec):
 
 
 def quantsimp(expr):
-    from sympy.physics.units import Quantity
+    from sympy.physics.units import Quantity, length
     l = []
     n = len(expr.args)
     for i in range (n):
