@@ -876,13 +876,26 @@ def quantsimp(expr):
     from sympy.physics.units import Quantity
     l = []
     n = len(expr.args)
-    for i in range (n-1):
-        l.append((1/expr.args[i]).scale_factor)
-    l.append(expr.args[n-1].scale_factor)
+    for i in range (n):
+        if (expr.args[i].is_Pow):
+            if (expr.args[i].args[1]<0):
+                l.append((1/expr.args[i]).scale_factor)
+            else:
+                a = expr.args[i].args[0]
+                l.append(a.scale_factor**(expr.args[i].args[1]))
+        elif (expr.args[i].is_Number):
+            l.append(expr.args[i])
+        elif (expr.args[i].is_symbol):
+            l.append(expr.args[i])
+        elif ((expr.args[i]).has(Quantity)):
+            if (expr.args[i].dimension == length):
+                l.append(expr.args[i].scale_factor)
+            else:
+                l.append(expr.args[i])
     a = list(reversed(l))
     b = a[0]
-    for i in range (1, n):
-        b *= 1/a[i]
+    for i in range(1, n):
+        b *= a[i]
     return b
 
 def logcombine(expr, force=False):
