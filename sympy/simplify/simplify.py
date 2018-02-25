@@ -895,7 +895,7 @@ def quantsimp(expr):
     a = list(reversed(l))
     b = a[0]
     for i in range(1, n):
-        b *= a[i]
+        b *= 1/a[i]
     return b
 
 def logcombine(expr, force=False):
