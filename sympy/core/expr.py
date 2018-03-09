@@ -300,6 +300,15 @@ class Expr(Basic, EvalfMixin):
                 return sympify(dif.is_positive)
         return StrictGreaterThan(self, other, evaluate=False)
 
+    def __trunc__(self):
+        r = self.round(2)
+        if self in(S.Nan, S.NegativeInfinity, S.Infinity, S.ComplexInfinity):
+            raise TypeError("can't truncate %s" % r)
+        if not r.is_Number:
+            raise TypeError("can't truncate symbols and expressions")
+        else:
+            return int(r)
+
     def __lt__(self, other):
         from sympy import StrictLessThan
         try:
