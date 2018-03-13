@@ -526,7 +526,10 @@ class log(Function):
             except ValueError:
                 pass
             if base is not S.Exp1:
-                return cls(arg)/cls(base)
+                if arg.is_symbol or base.is_symbol:
+                    return cls(arg, base, evaluate=False)
+                else:
+                    return cls(arg)/cls(base)
             else:
                 return cls(arg)
 
@@ -608,6 +611,8 @@ class log(Function):
     def _eval_expand_log(self, deep=True, **hints):
         from sympy import unpolarify, expand_log
         from sympy.concrete import Sum, Product
+        if self.args[0].is_symbol:
+            return self
         force = hints.get('force', False)
         if (len(self.args) == 2):
             return expand_log(self.func(*self.args), deep=deep, force=force)
@@ -654,11 +659,14 @@ class log(Function):
 
     def _eval_simplify(self, ratio, measure):
         from sympy.simplify.simplify import expand_log, simplify
-        if (len(self.args) == 2):
-            return simplify(self.func(*self.args), ratio=ratio, measure=measure)
-        expr = self.func(simplify(self.args[0], ratio=ratio, measure=measure))
-        expr = expand_log(expr, deep=True)
-        return min([expr, self], key=measure)
+        if self.args[0].is_symbol:
+            return self
+        else:
+            if (len(self.args) == 2):
+                return simplify(self.func(*self.args), ratio=ratio, measure=measure)
+            expr = self.func(simplify(self.args[0], ratio=ratio, measure=measure))
+            expr = expand_log(expr, deep=True)
+            return min([expr, self], key=measure)
 
     def as_real_imag(self, deep=True, **hints):
         """
